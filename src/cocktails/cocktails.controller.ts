@@ -1,29 +1,49 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
-import { CocktailsService, type Cocktail } from './cocktails.service';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { CocktailsService, Cocktail } from './cocktails.service';
 
 @Controller('cocktails')
 export class CocktailsController {
   constructor(private readonly cocktailsService: CocktailsService) {}
 
   @Get()
-  getAll(): Cocktail[] {
+  async findAll(): Promise<Cocktail[]> {
     return this.cocktailsService.findAll();
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<Cocktail | null> {
+    return this.cocktailsService.findOne(Number(id));
+  }
+
   @Post()
-  create(@Body() cocktail: Omit<Cocktail, 'id'>): Cocktail {
-    return this.cocktailsService.create(cocktail);
+  async create(
+    @Body()
+    data: {
+      name: string;
+      category?: string;
+      instruction?: string;
+      ingredients?: { name: string; isAlcohol: boolean }[];
+    }
+  ): Promise<Cocktail> {
+    return this.cocktailsService.create(data);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() cocktail: Partial<Omit<Cocktail, 'id'>>): Cocktail | string {
-    const updated = this.cocktailsService.update(Number(id), cocktail);
-    return updated || 'Cocktail not found';
+  async update(
+    @Param('id') id: string,
+    @Body()
+    data: {
+      name?: string;
+      category?: string;
+      instruction?: string;
+      ingredients?: { name: string; isAlcohol: boolean }[];
+    }
+  ): Promise<Cocktail> {
+    return this.cocktailsService.update(Number(id), data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): string {
-    const deleted = this.cocktailsService.remove(Number(id));
-    return deleted ? 'Deleted' : 'Cocktail not found';
+  async remove(@Param('id') id: string): Promise<Cocktail> {
+    return this.cocktailsService.remove(Number(id));
   }
 }

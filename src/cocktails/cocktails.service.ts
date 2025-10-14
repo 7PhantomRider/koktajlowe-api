@@ -1,42 +1,138 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+// Interfejsy dopasowane do schematu Prisma
+export interface Ingredient {
+  name: string;
+  isAlcohol: boolean;
+}
 
 export interface Cocktail {
   id: number;
   name: string;
-  category: string;
-  instructions: string;
-  ingredients: string[];
+  category: string | null;
+  instruction: string | null;
+  ingredients: Ingredient[];
 }
 
 @Injectable()
 export class CocktailsService {
-  private cocktails: Cocktail[] = [];
+  // Pobierz wszystkie koktajle
+  async findAll(): Promise<Cocktail[]> {
+    const cocktails = await prisma.cocktail.findMany({
+      include: { ingredients: true },
+    });
 
-  findAll(): Cocktail[] {
-    return this.cocktails;
+    return cocktails.map(c => ({
+      id: c.id,
+      name: c.name,
+      category: c.category,
+      instruction: c.instruction,
+      ingredients: c.ingredients.map(i => ({ name: i.name, isAlcohol: i.isAlcohol })),
+    }));
   }
 
-  findOne(id: number): Cocktail | undefined {
-    return this.cocktails.find(c => c.id === id);
+  // Pobierz koktajl po ID
+  async findOne(id: number): Promise<Cocktail | null> {
+    const cocktail = await prisma.cocktail.findUnique({
+      where: { id },
+      include: { ingredients: true },
+    });
+
+    if (!cocktail) return null;
+
+    return {
+      id: cocktail.id,
+      name: cocktail.name,
+      category: cocktail.category,
+      instruction: cocktail.instruction,
+      ingredients: cocktail.ingredients.map(i => ({ name: i.name, isAlcohol: i.isAlcohol })),
+    };
   }
 
-  create(cocktail: Omit<Cocktail, 'id'>): Cocktail {
-    const newCocktail = { id: Date.now(), ...cocktail };
-    this.cocktails.push(newCocktail);
-    return newCocktail;
+  // Stwórz nowy koktajl
+  async create(data: {
+    name: string;
+    category?: string;
+    instruction?: string;
+    ingredients?: { name: string; isAlcohol: boolean }[];
+  }): Promise<Cocktail> {
+    const cocktail = await prisma.cocktail.create({
+      data: {
+        name: data.name,
+        category: data.category || null,
+        instruction: data.instruction || null,
+        ingredients: {
+          create: data.ingredients?.map(i => ({
+            name: i.name,
+            isAlcohol: i.isAlcohol,
+          })) || [],
+        },
+      },
+      include: { ingredients: true },
+    });
+
+    return {
+      id: cocktail.id,
+      name: cocktail.name,
+      category: cocktail.category,
+      instruction: cocktail.instruction,
+      ingredients: cocktail.ingredients.map(i => ({ name: i.name, isAlcohol: i.isAlcohol })),
+    };
   }
 
-  update(id: number, updatedCocktail: Partial<Cocktail>): Cocktail | undefined {
-    const cocktail = this.cocktails.find(c => c.id === id);
-    if (!cocktail) return undefined;
-    Object.assign(cocktail, updatedCocktail);
-    return cocktail;
+  // Zaktualizuj koktajl
+  async update(
+    id: number,
+    data: {
+      name?: string;
+      category?: string;
+      instruction?: string;
+      ingredients?: { name: string; isAlcohol: boolean }[];
+    }
+  ): Promise<Cocktail> {
+    if (data.ingredients) {
+      // usuń stare składniki
+      await prisma.ingredient.deleteMany({ where: { cocktailId: id } });
+    }
+
+    const cocktail = await prisma.cocktail.update({
+      where: { id },
+      data: {
+        name: data.name,
+        category: data.category,
+        instruction: data.instruction,
+        ingredients: data.ingredients
+          ? { create: data.ingredients.map(i => ({ name: i.name, isAlcohol: i.isAlcohol })) }
+          : undefined,
+      },
+      include: { ingredients: true },
+    });
+
+    return {
+      id: cocktail.id,
+      name: cocktail.name,
+      category: cocktail.category,
+      instruction: cocktail.instruction,
+      ingredients: cocktail.ingredients.map(i => ({ name: i.name, isAlcohol: i.isAlcohol })),
+    };
   }
 
-  remove(id: number): boolean {
-    const index = this.cocktails.findIndex(c => c.id === id);
-    if (index === -1) return false;
-    this.cocktails.splice(index, 1);
-    return true;
+  // Usuń koktajl
+  async remove(id: number): Promise<Cocktail> {
+    const cocktail = await prisma.cocktail.delete({
+      where: { id },
+      include: { ingredients: true },
+    });
+
+    return {
+      id: cocktail.id,
+      name: cocktail.name,
+      category: cocktail.category,
+      instruction: cocktail.instruction,
+      ingredients: cocktail.ingredients.map(i => ({ name: i.name, isAlcohol: i.isAlcohol })),
+    };
   }
 }
