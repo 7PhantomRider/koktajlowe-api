@@ -1,3 +1,5 @@
+<img src="https://skillicons.dev/icons?i=nestjs,typescript,prisma,mysql,postman" />
+
 # Cocktail API
 Rozwiązanie zadania rekrutacyjnego do Koła Naukowego Solvro 
 Projekt pozwala na zarządzanie składnikami oraz ich składnikami przez REST API
@@ -14,17 +16,17 @@ Projekt pozwala na zarządzanie składnikami oraz ich składnikami przez REST AP
 - Postman
 
 ## struktura
-cocktail-api/
-├── prisma/
-│   └── schema.prisma
-├── src/
-│   ├── cocktails/
-│   │   ├── cocktails.controller.ts
-│   │   ├── cocktails.module.ts
-│   │   └── cocktails.service.ts
-│   ├── app.module.ts
-│   └── main.ts
-├── .env
+cocktail-api/  
+├── prisma/  
+│   └── schema.prisma  
+├── src/  
+│   ├── cocktails/  
+│   │   ├── cocktails.controller.ts  
+│   │   ├── cocktails.module.ts  
+│   │   └── cocktails.service.ts  
+│   ├── app.module.ts  
+│   └── main.ts  
+├── .env  
 └── README.md
 
 ## uruchamianie
@@ -42,19 +44,19 @@ http://localhost:3000
 
 ## testowanie API
 ### GET
-/cocktails
+/cocktails  
 lista wszystkich koktajli
 ### GET
-/cocktails/:id
+/cocktails/:id  
 jeden koktajl
 ### POST
-/cocktails
+/cocktails  
 dodaj nowy
 ### PUT
-/cocktails/:id
+/cocktails/:id  
 edytuj go
 ### DELETE
-/cocktails/:id
+/cocktails/:id  
 usuń go
 
 ## screenshoty TESTów
@@ -64,7 +66,7 @@ usuń go
 ![Databaza składników](./screenshots/SQL-Ingredient.png)
 
 ## note
-projekt stricte rekrutacyjny ale posłużył mi jako pierwsza piaskownica pisania w NestJS co było cenną lekcją
+projekt stricte rekrutacyjny ale posłużył mi jako cenna dla rozwoju piaskownica pisania w NestJS  
 spodobał mi się pomysł by stał się z niego full stack-owy projekt z choćby prostym front-endem do wizualizacją tego procesu zarządzania
 jest to na pewno kolejny krok, lecz na ten moment skupię się na tworzeniu tego co backendowe
 
@@ -73,7 +75,14 @@ kolejnym krokiem rozszerzenia projektu są niewątpliwie
 - ale i mój wymarzony prosty interfejs frontendowy np. w React, pewne easter eggi z tym związane są ju widoczne w projekcie choćby kolumna IMAGE w databazie
 
 ## kto
-Pozdrawiam ciepło
-Seweryn Nekrasz
-nekraszseweryn@gmail.com
+<p align="center">
+  Pozdrawiam ciepło</b>
+</p>
+<p align="center">
+  Seweryn Nekrasz</b>
+</p>
+<p align="center">
+  nekraszseweryn@gmail.com</b>
+</p>
+
 
