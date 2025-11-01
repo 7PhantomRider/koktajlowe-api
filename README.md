@@ -67,11 +67,11 @@ usuń go
 
 ## note
 projekt stricte rekrutacyjny ale posłużył mi jako cenna dla rozwoju piaskownica pisania w NestJS  
-spodobał mi się pomysł by stał się z niego full stack-owy projekt z choćby prostym front-endem do wizualizacją tego procesu zarządzania
-jest to na pewno kolejny krok, lecz na ten moment skupię się na tworzeniu tego co backendowe
+spodobał mi się pomysł by stał się z niego full stack-owy projekt z choćby prostym front-endem do wizualizacji procesu owego zarządzania koktajlami  
+jest to na pewno kolejny krok, lecz na ten moment skupię się na tworzeniu tego co backendowe  
 
-kolejnym krokiem rozszerzenia projektu są niewątpliwie
-- wspomniane w miłych do posiadania : filtrowanie z sortowaniem
+następnymi etapami rozszerzenia projektu są niewątpliwie:  
+- wspomniane w miłych do posiadania : filtrowanie z sortowaniem  
 - ale i mój wymarzony prosty interfejs frontendowy np. w React, pewne easter eggi z tym związane są ju widoczne w projekcie choćby kolumna IMAGE w databazie
 
 ## kto
